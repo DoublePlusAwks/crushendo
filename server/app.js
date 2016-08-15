@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 const PORT = 3000;
 const JSON_SIZE_LIMIT = '50mb';
 
@@ -17,7 +18,7 @@ app.get('/test', function(request, response)  {
   spotify.search('Love').then(function(result)  {
     response.json(result);
   });
-})
+});
 
 app.post('/autocomplete', function(request, response) {
   var start = Date.now();
@@ -29,6 +30,6 @@ app.post('/autocomplete', function(request, response) {
 
 app.listen(PORT, function() {
   console.log('Crushendo listening on port: %s', PORT);
-})
+});
 
 module.exports = app;

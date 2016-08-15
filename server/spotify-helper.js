@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 var SpotifyWebApi = require('spotify-web-api-node');
 const secrets = require('../config/secrets');
 const SEARCH_LIMIT = 2;
@@ -13,7 +14,7 @@ if(!Array.prototype.last){
   Array.prototype.last = function(){
     return this[this.length - 1];
   };
-};
+}
 
 var formatSpotifyObject = function(obj) {
   var result = {};
@@ -22,20 +23,20 @@ var formatSpotifyObject = function(obj) {
   result.image = (obj.type === 'track') ?
     obj.album.images.last().url : obj.images.last().url;
   return result;
-}
+};
 
 var setAccessToken = function() {
   spotifyApi.clientCredentialsGrant()
     .then(function(data) {
-      console.log('The access token expires in ' + data.body['expires_in']);
-      console.log('The access token is ' + data.body['access_token']);
+      console.log('The access token expires in ' + data.body.expires_in);
+      console.log('The access token is ' + data.body.access_token);
 
     // Save the access token so that it's used in future calls
-    spotifyApi.setAccessToken(data.body['access_token']);
+    spotifyApi.setAccessToken(data.body.access_token);
   }, function(err) {
     console.log('Something went wrong when retrieving an access token', err);
   });
-}
+};
 
 var SpotifyHelper = function() {
   setAccessToken();
