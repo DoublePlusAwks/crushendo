@@ -4,7 +4,7 @@
   "description": "A web app to automatically generate Spotify workout playlists",
   "main": "index.js",
   "scripts": {
-    "start": "node app/app.js",
+    "start": "node server/app.js",
     "test": "mocha test"
   },
   "repository": {
@@ -18,10 +18,12 @@
   },
   "homepage": "https://github.com/DoublePlusAwks/crushendo#readme",
   "devDependencies": {
+    "bluebird": "^3.4.1",
     "mocha": "^3.0.2",
     "supertest": "^2.0.0"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "spotify-web-api-node": "^2.3.5"
   }
