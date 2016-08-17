@@ -1,14 +1,9 @@
 /*jshint esversion: 6 */
+var appRoot = require('app-root-path');
+var reqlib = require('app-root-path').require;
 var SpotifyWebApi = require('spotify-web-api-node');
-const secrets = require('../config/secrets');
+const secrets = reqlib('/config/secrets');
 const SEARCH_LIMIT = 2;
-
-// credentials are optional
-var spotifyApi = new SpotifyWebApi({
-  clientId : secrets.clientId,
-  clientSecret : secrets.clientSecret,
-  redirectUri : secrets.redirectUri
-});
 
 if(!Array.prototype.last){
   Array.prototype.last = function(){
@@ -25,25 +20,22 @@ var formatSpotifyObject = function(obj) {
   return result;
 };
 
-var setAccessToken = function() {
-  spotifyApi.clientCredentialsGrant()
-    .then(function(data) {
-      console.log('The access token expires in ' + data.body.expires_in);
-      console.log('The access token is ' + data.body.access_token);
-
-    // Save the access token so that it's used in future calls
-    spotifyApi.setAccessToken(data.body.access_token);
-  }, function(err) {
-    console.log('Something went wrong when retrieving an access token', err);
+var SpotifyHelper = function(accessToken) {
+  this.spotifyApi = new SpotifyWebApi({
+    clientId : secrets.clientId,
+    clientSecret : secrets.clientSecret,
+    redirectUri : secrets.redirectUri
   });
-};
-
-var SpotifyHelper = function() {
-  setAccessToken();
+  if(accessToken) {
+    this.spotifyApi.setAccessToken(accessToken);
+  } else {
+    this.getClientToken();
+    setInterval(this.getClientToken, 1000 * 60 * 30);
+  }
 };
 
 SpotifyHelper.prototype.search = function(query) {
-  return spotifyApi.search(query, ['track', 'artist'], {limit: SEARCH_LIMIT})
+  return this.spotifyApi.search(query, ['track', 'artist'], {limit: SEARCH_LIMIT})
     .then(function(data)  {
       var result = {};
       result.artists = data.body.artists.items.map(formatSpotifyObject);
@@ -53,7 +45,7 @@ SpotifyHelper.prototype.search = function(query) {
 };
 
 SpotifyHelper.prototype.getRecommendations = function(seed_artists, seed_tracks, limit, bpm, danceability, energy)  {
-  return spotifyApi.getRecommendations({
+  return this.spotifyApi.getRecommendations({
     seed_artists: seed_artists,
     seed_tracks: seed_tracks,
     limit: limit,
@@ -72,10 +64,23 @@ SpotifyHelper.prototype.getRecommendations = function(seed_artists, seed_tracks,
 };
 
 SpotifyHelper.prototype.getAudioFeatures = function(trackId)  {
-  return spotifyApi.getAudioFeaturesForTrack(trackId)
+  return this.spotifyApi.getAudioFeaturesForTrack(trackId)
     .then(function(result) {
       return result.body;
     });
+};
+
+SpotifyHelper.prototype.getClientToken = function() {
+  this.spotifyApi.clientCredentialsGrant()
+    .then(function(data) {
+      console.log('The access token expires in ' + data.body.expires_in);
+      console.log('The access token is ' + data.body.access_token);
+
+    // Save the access token so that it's used in future calls
+    this.spotifyApi.setAccessToken(data.body.access_token);
+  }, function(err) {
+    console.log('Something went wrong when retrieving an access token', err);
+  });
 };
 
 module.exports = SpotifyHelper;

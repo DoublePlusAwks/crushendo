@@ -4,7 +4,12 @@ const JSON_SIZE_LIMIT = '50mb';
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var SpotifyHelper = require('./spotify-helper');
+var url = require('url');
+var fs = require('fs');
+var appRoot = require('app-root-path');
+var reqlib = require('app-root-path').require;
+var SpotifyHelper = reqlib('/server/spotify-helper');
+var index = fs.readFileSync(appRoot + '/public/index.html');
 var spotify = new SpotifyHelper();
 var app = express();
 
@@ -46,6 +51,17 @@ app.post('/trackinfo', function(request, response)  {
     }, function(err)  {
       console.log(err);
     });
+});
+
+app.get('/callback', function(request, response)  {
+  var url_parts = url.parse(request.url, true);
+  var access_token = url_parts.query.code;
+  response.json(access_token);
+});
+
+app.get('/', function(request, response)  {
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.end(index);
 });
 
 app.listen(PORT, function() {
