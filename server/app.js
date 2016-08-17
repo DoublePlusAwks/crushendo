@@ -46,10 +46,6 @@ app.post('/recommendations', function(request, response)  {
     });
 });
 
-app.get('/idk', function(request, response) {
-  response.render('index');
-});
-
 app.post('/trackinfo', function(request, response)  {
   spotify.getAudioFeatures(request.body.query)
     .then(function(result)  {
