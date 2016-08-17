@@ -13,6 +13,7 @@ var spotify = new SpotifyHelper();
 var app = express();
 
 app.use(bodyParser.json());
+app.use(express.static("public"));
 app.set('views', appRoot + '/views');
 app.set('view engine', 'ejs');
 
