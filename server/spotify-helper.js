@@ -85,7 +85,7 @@ SpotifyHelper.prototype.getClientToken = function() {
 };
 
 SpotifyHelper.prototype.authorizeURL = function(state)  {
-  this.spotifyApi.createAuthorizeURL(API_SCOPES, state);
+  return this.spotifyApi.createAuthorizeURL(API_SCOPES, state);
 };
 
 module.exports = SpotifyHelper;

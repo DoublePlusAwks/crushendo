@@ -14,7 +14,7 @@ var spotify = new SpotifyHelper();
 var app = express();
 
 app.use(bodyParser.json());
-app.set('views', appRoot + '/public');
+app.set('views', appRoot + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/monitor', function(request, response)  {
@@ -62,6 +62,7 @@ app.get('/callback', function(request, response)  {
 });
 
 app.get('/', function(request, response)  {
+  console.log(spotify.authorizeURL());
   response.render('index', {authorizeURL: spotify.authorizeURL()});
 });
 
