@@ -9,7 +9,6 @@ var fs = require('fs');
 var appRoot = require('app-root-path');
 var reqlib = require('app-root-path').require;
 var SpotifyHelper = reqlib('/server/spotify-helper');
-// var index = fs.readFileSync(appRoot + '/public/index.html');
 var spotify = new SpotifyHelper();
 var app = express();
 
