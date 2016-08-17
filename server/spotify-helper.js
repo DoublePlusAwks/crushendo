@@ -3,6 +3,7 @@ var appRoot = require('app-root-path');
 var reqlib = require('app-root-path').require;
 var SpotifyWebApi = require('spotify-web-api-node');
 const secrets = reqlib('/config/secrets');
+const API_SCOPES = ['playlist-modify-private'];
 const SEARCH_LIMIT = 2;
 
 if(!Array.prototype.last){
@@ -26,7 +27,7 @@ var SpotifyHelper = function(accessToken) {
     clientSecret : secrets.clientSecret,
     redirectUri : secrets.redirectUri
   });
-  if(accessToken) {
+  if(accessToken !== undefined) {
     this.spotifyApi.setAccessToken(accessToken);
   } else {
     this.getClientToken();
@@ -81,6 +82,10 @@ SpotifyHelper.prototype.getClientToken = function() {
   }, function(err) {
     console.log('Something went wrong when retrieving an access token', err);
   });
+};
+
+SpotifyHelper.prototype.authorizeURL = function(state)  {
+  this.spotifyApi.createAuthorizeURL(API_SCOPES, state);
 };
 
 module.exports = SpotifyHelper;

@@ -9,11 +9,13 @@ var fs = require('fs');
 var appRoot = require('app-root-path');
 var reqlib = require('app-root-path').require;
 var SpotifyHelper = reqlib('/server/spotify-helper');
-var index = fs.readFileSync(appRoot + '/public/index.html');
+// var index = fs.readFileSync(appRoot + '/public/index.html');
 var spotify = new SpotifyHelper();
 var app = express();
 
 app.use(bodyParser.json());
+app.set('views', appRoot + '/public');
+app.set('view engine', 'ejs');
 
 app.get('/monitor', function(request, response)  {
   response.send('Status: OK');
@@ -44,6 +46,10 @@ app.post('/recommendations', function(request, response)  {
     });
 });
 
+app.get('/idk', function(request, response) {
+  response.render('index');
+});
+
 app.post('/trackinfo', function(request, response)  {
   spotify.getAudioFeatures(request.body.query)
     .then(function(result)  {
@@ -60,8 +66,7 @@ app.get('/callback', function(request, response)  {
 });
 
 app.get('/', function(request, response)  {
-  response.writeHead(200, {'Content-Type': 'text/html'});
-  response.end(index);
+  response.render('index', {authorizeURL: spotify.authorizeURL()});
 });
 
 app.listen(PORT, function() {
