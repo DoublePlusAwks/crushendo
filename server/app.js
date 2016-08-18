@@ -8,12 +8,14 @@ var url = require('url');
 var fs = require('fs');
 var appRoot = require('app-root-path');
 var reqlib = require('app-root-path').require;
+var partials = require('express-partials');
 var SpotifyHelper = reqlib('/server/spotify-helper');
 var spotify = new SpotifyHelper();
 var app = express();
 
 app.use(bodyParser.json());
 app.use(express.static(appRoot + "/public"));
+app.use(partials());
 app.set('views', appRoot + '/views');
 app.set('view engine', 'ejs');
 
