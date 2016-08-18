@@ -62,7 +62,6 @@ app.get('/callback', function(request, response)  {
 });
 
 app.get('/', function(request, response)  {
-  console.log(spotify.authorizeURL());
   response.render('index', {authorizeURL: spotify.authorizeURL()});
 });
 

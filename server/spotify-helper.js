@@ -22,6 +22,7 @@ var formatSpotifyObject = function(obj) {
 };
 
 var SpotifyHelper = function(accessToken) {
+  var thisSpotifyHelper = this;
   this.spotifyApi = new SpotifyWebApi({
     clientId : secrets.clientId,
     clientSecret : secrets.clientSecret,
@@ -31,7 +32,9 @@ var SpotifyHelper = function(accessToken) {
     this.spotifyApi.setAccessToken(accessToken);
   } else {
     this.getClientToken();
-    setInterval(this.getClientToken, 1000 * 60 * 30);
+    this.interval = setInterval(
+      function() {thisSpotifyHelper.getClientToken();}, 1000 * 60 * 30
+    );
   }
 };
 
