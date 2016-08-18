@@ -28,14 +28,6 @@ var SpotifyHelper = function(accessToken) {
     clientSecret : secrets.clientSecret,
     redirectUri : secrets.redirectUri
   });
-  if(accessToken !== undefined) {
-    this.spotifyApi.setAccessToken(accessToken);
-  } else {
-    this.getClientToken();
-    this.interval = setInterval(
-      function() {thisSpotifyHelper.getClientToken();}, 1000 * 60 * 30
-    );
-  }
 };
 
 SpotifyHelper.prototype.search = function(query) {
@@ -75,13 +67,14 @@ SpotifyHelper.prototype.getAudioFeatures = function(trackId)  {
 };
 
 SpotifyHelper.prototype.getClientToken = function() {
-  this.spotifyApi.clientCredentialsGrant()
+  thisSpotifyHelper = this;
+  thisSpotifyHelper.spotifyApi.clientCredentialsGrant()
     .then(function(data) {
       console.log('The access token expires in ' + data.body.expires_in);
       console.log('The access token is ' + data.body.access_token);
 
     // Save the access token so that it's used in future calls
-    this.spotifyApi.setAccessToken(data.body.access_token);
+    thisSpotifyHelper.spotifyApi.setAccessToken(data.body.access_token);
   }, function(err) {
     console.log('Something went wrong when retrieving an access token', err);
   });
@@ -89,6 +82,10 @@ SpotifyHelper.prototype.getClientToken = function() {
 
 SpotifyHelper.prototype.authorizeURL = function(state)  {
   return this.spotifyApi.createAuthorizeURL(API_SCOPES, state);
+};
+
+SpotifyHelper.prototype.getMe = function()  {
+  return this.spotifyApi.getMe();
 };
 
 module.exports = SpotifyHelper;

@@ -11,6 +11,10 @@ var reqlib = require('app-root-path').require;
 var partials = require('express-partials');
 var SpotifyHelper = reqlib('/server/spotify-helper');
 var spotify = new SpotifyHelper();
+spotify.getClientToken();
+spotify.interval = setInterval(
+  function() {spotify.getClientToken();}, 1000 * 60 * 30
+);
 var app = express();
 
 app.use(bodyParser.json());
@@ -59,8 +63,17 @@ app.post('/trackinfo', function(request, response)  {
 
 app.get('/callback', function(request, response)  {
   var url_parts = url.parse(request.url, true);
-  var access_token = url_parts.query.code;
-  response.json(access_token);
+  var authCode = url_parts.query.code;
+  var s = new SpotifyHelper();
+  s.spotifyApi.authorizationCodeGrant(authCode).then(function(data) {
+    s.spotifyApi.setAccessToken(data.body.access_token);
+    s.spotifyApi.setRefreshToken(data.body.refresh_token);
+    s.getMe().then(function(result) {
+      response.send('Willkommen ' + result.body.id);
+    });
+  }, function(err)  {
+    response.json(err);
+  });
 });
 
 app.get('/', function(request, response)  {
