@@ -40,16 +40,18 @@ SpotifyHelper.prototype.search = function(query) {
     });
 };
 
-SpotifyHelper.prototype.getRecommendations = function(seed_artists, seed_tracks, limit, bpm, danceability, energy)  {
+SpotifyHelper.prototype.getRecommendations = function(seed_artists, seed_tracks, limit, bpm)  {
+  var danceability = 0.8;
+  var energy = 0.5;
   return this.spotifyApi.getRecommendations({
     seed_artists: seed_artists,
     seed_tracks: seed_tracks,
     limit: limit,
     min_tempo: bpm - 5,
-    max_tempo: bpm + 5,
-    target_danceability: danceability,
+    // max_tempo: bpm + 5,
+    // target_danceability: danceability,
     min_danceability: danceability - 0.1,
-    target_energy: energy,
+    // target_energy: energy,
     min_energy: energy - 0.1
   }).then(function(result)  {
     return result.body.tracks.map(formatSpotifyObject);

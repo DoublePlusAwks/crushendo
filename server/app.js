@@ -34,18 +34,16 @@ app.get('/test', function(request, response)  {
 });
 
 app.post('/autocomplete', function(request, response) {
-  var start = Date.now();
   spotify.search(request.body.query).then(function(result)  {
-    console.log(Date.now() - start);
     response.json(result);
+  }, function(err)  {
+    console.log(err);
   });
 });
 
 app.post('/recommendations', function(request, response)  {
-  var start = Date.now();
-  spotify.getRecommendations(request.body.artists, request.body.tracks, 10, 145, 0.8, 0.5)
+  spotify.getRecommendations(request.body.artists, request.body.tracks, 10)
     .then(function(result)  {
-      console.log(Date.now() - start);
       response.json(result);
     }, function(err)  {
       console.log(err);
