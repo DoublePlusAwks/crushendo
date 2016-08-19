@@ -14,7 +14,7 @@ if(!Array.prototype.last){
 
 var formatSpotifyObject = function(obj) {
   var result = {};
-  result.id = obj.id;
+  result.uri = obj.uri;
   result.name = obj.name;
   result.image = (obj.type === 'track') ?
     obj.album.images.last().url : obj.images.last().url;
