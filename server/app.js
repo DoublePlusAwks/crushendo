@@ -75,7 +75,7 @@ app.get('/callback', function(request, response)  {
 });
 
 app.get('/', function(request, response)  {
-  response.render('index', {authorizeURL: spotify.authorizeURL()});
+  response.render('index');
 });
 
 app.listen(PORT, function() {
