@@ -12,11 +12,14 @@ img {
   background-color: #FFB74D;
   max-width: 50%;
   margin: 0 auto;
-  margin-bottom: 20px;
 }
 
 .container {
   margin: 0 auto;
+}
+
+#seed-input {
+  margin: 20px auto;
 }
 
 .autocomplete-suggestion img  {
