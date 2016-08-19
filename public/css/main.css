@@ -11,3 +11,8 @@ img {
 .container {
   margin: 0 auto;
 }
+
+.autocomplete-suggestion img  {
+  max-width: 64px;
+  max-height: 64px;
+}

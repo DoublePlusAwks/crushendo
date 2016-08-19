@@ -15,6 +15,7 @@ if(!Array.prototype.last){
 var formatSpotifyObject = function(obj) {
   var result = {};
   result.uri = obj.uri;
+  result.id = obj.id;
   result.name = obj.name;
   result.image = (obj.type === 'track') ?
     obj.album.images.last().url : obj.images.last().url;
@@ -33,10 +34,9 @@ var SpotifyHelper = function(accessToken) {
 SpotifyHelper.prototype.search = function(query) {
   return this.spotifyApi.search(query, ['track', 'artist'], {limit: SEARCH_LIMIT})
     .then(function(data)  {
-      var result = {};
-      result.artists = data.body.artists.items.map(formatSpotifyObject);
-      result.tracks = data.body.tracks.items.map(formatSpotifyObject);
-      return result;
+      var artists = data.body.artists.items.map(formatSpotifyObject);
+      var tracks = data.body.tracks.items.map(formatSpotifyObject);
+      return artists.concat(tracks);
     });
 };
 

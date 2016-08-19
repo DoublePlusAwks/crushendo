@@ -8,16 +8,20 @@ $(function()  {
         dataType: 'json',
         data: JSON.stringify({query: term}),
         success: function(data) {
-          var artists = data.artists.map(function(x) {
-            return x.name;
-          });
-          var tracks = data.tracks.map(function(x) {
-            return x.name;
-          });
-          console.log(artists.concat(tracks));
-          response(artists.concat(tracks));
+          response(data);
         }
       });
+    },
+    renderItem: function (item, search) {
+      search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+      console.log(item);
+      return '<div class="autocomplete-suggestion" data-id="' + item.id + '" data-uri="' + item.uri + '">' + '<img src="' + item.image + '"/>' + item.name.replace(re, "<b>$1</b>") + '</div>';
+    },
+    cache: true,
+    delay: 100,
+    onSelect: function(e, term, item) {
+      alert('Item "'+item.data('uri')+' ('+item.data('id')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
     }
   };
 
