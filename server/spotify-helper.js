@@ -34,8 +34,8 @@ var SpotifyHelper = function(accessToken) {
 SpotifyHelper.prototype.search = function(query) {
   return this.spotifyApi.search(query, ['track', 'artist'], {limit: SEARCH_LIMIT})
     .then(function(data)  {
-      var artists = data.body.artists.items.map(formatSpotifyObject);
-      var tracks = data.body.tracks.items.map(formatSpotifyObject);
+      var artists = (data.body.artists.items === []) ? [] : data.body.artists.items.map(formatSpotifyObject);
+      var tracks = (data.body.tracks.items === []) ? [] : data.body.tracks.items.map(formatSpotifyObject);
       return artists.concat(tracks);
     });
 };
@@ -54,6 +54,7 @@ SpotifyHelper.prototype.getRecommendations = function(seed_artists, seed_tracks,
     // target_energy: energy,
     min_energy: energy - 0.1
   }).then(function(result)  {
+    if(result.body.tracks === []) { return; }
     return result.body.tracks.map(formatSpotifyObject);
   }, function(err)  {
     console.log(err);
