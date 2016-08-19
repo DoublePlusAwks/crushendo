@@ -50,12 +50,18 @@ $(function()  {
       data: JSON.stringify(seedIds),
       success: function(data) {
         var ids = [];
+        $('#main').empty();
         data.forEach(function(e)  {
+          var url = 'https://embed.spotify.com/?uri=spotify:track:' + e.id.toString() + '&theme=white"';
+          console.log(url);
+          $('#main').append(
+            '<iframe src="' + url + '"width="300" height="80" frameborder="0" allowtransparency="true"></iframe>'
+          );
           ids.push(e.id);
         });
         console.log(ids);
-        $('#main').empty().append(
-          '<iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:' + ids.toString() + '" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
+      //   $('#main').empty().append(
+      //     '<iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:' + ids.toString() + '" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
       }
     });
   });
