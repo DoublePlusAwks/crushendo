@@ -37,7 +37,7 @@ app.post('/autocomplete', function(request, response) {
   spotify.search(request.body.query).then(function(result)  {
     response.json(result);
   }, function(err)  {
-    console.log(err);
+    console.log("Autocomplete error: " + err);
   });
 });
 
@@ -46,7 +46,7 @@ app.post('/recommendations', function(request, response)  {
     .then(function(result)  {
       response.json(result);
     }, function(err)  {
-      console.log(err);
+      console.log("Recommendations error: " + err);
     });
 });
 
