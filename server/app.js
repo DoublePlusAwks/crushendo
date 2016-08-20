@@ -10,6 +10,7 @@ var fs = require('fs');
 var appRoot = require('app-root-path');
 var reqlib = require('app-root-path').require;
 var partials = require('express-partials');
+const secrets = reqlib('/config/secrets');
 var SpotifyHelper = reqlib('/server/spotify-helper');
 var spotify = new SpotifyHelper();
 spotify.getClientToken();
@@ -20,7 +21,7 @@ var app = express();
 
 app.set('trust proxy', 1);
 app.use(session({
-  secret: 'keyboard cat',
+  secret: secrets.sessionSecret,
   resave: false,
   saveUninitialized: true,
   cookie: {}
@@ -90,6 +91,7 @@ app.get('/callback', function(request, response)  {
       var playlistName = 'Crushendo Playlist ' + Date.now();
       s.spotifyApi.createPlaylist(userId, playlistName, { 'public' : false })
         .then(function(data) {
+          console.log('Created playlist: ' + data.body.uri);
           s.spotifyApi.addTracksToPlaylist(userId, data.body.id, uris)
             .then(function(data)  {
               response.redirect("/");
