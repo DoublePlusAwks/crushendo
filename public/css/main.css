@@ -15,6 +15,18 @@ iframe  {
   display:block;
 }
 
+.btn-primary  {
+  color: #FFF;
+  background-color: #FFB74D;
+  border-color: #FFB74D;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #FFCC80;
+  border-color: ##FFCC80;
+}
+
 .jumbotron  {
   background-color: #FFB74D;
   max-width: 50%;
