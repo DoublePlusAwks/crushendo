@@ -28,6 +28,7 @@ $(function()  {
     },
     cache: true,
     minChars: 1,
+    delay: 300,
     onSelect: function(e, term, item) {
       if(item.data('type') === 'artist')  {
         seedIds.artists.push(item.data('id'));
@@ -41,7 +42,6 @@ $(function()  {
   $('#seed-input').autoComplete(options);
 
   $('#seed-submit').on('click', function() {
-    console.log('hiya');
     $.ajax({
       type: 'POST',
       url: '/recommendations',
@@ -49,13 +49,42 @@ $(function()  {
       dataType: 'json',
       data: JSON.stringify(seedIds),
       success: function(data) {
-        var ids = [];
+        var recommendationIds = [];
         data.forEach(function(e)  {
-          ids.push(e.id);
+          recommendationIds.push(e.id);
         });
-        console.log(ids);
         $('#main').empty().append(
-          '<iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:' + ids.toString() + '&theme=white" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
+          '<iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:' +
+            recommendationIds.toString() +
+            '&theme=white" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>'
+        );
+        $('#main').append(
+          '<button id="save" class="btn btn-primary btn-lg center-block">Save playlist</button>'
+        );
+        $('#save').on('click', function()  {
+          $.ajax({
+            beforeSend: function(request){
+              request.setRequestHeader(
+                "Origin",
+                window.location.protocol + window.location.hostname
+              );
+              request.setRequestHeader(
+                "Access-Control-Allow-Credentials", true
+              );
+              request.setRequestHeader(
+                "Access-Control-Allow-Origin",
+                window.location.protocol + window.location.hostname
+              );
+            },
+            type: 'POST',
+            url: '/save',
+            contentType: 'application/json',
+            data: JSON.stringify(recommendationIds),
+            success: function(response) {
+              window.location.replace(response.authorizeURL);
+            }
+          });
+        });
       }
     });
   });

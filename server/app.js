@@ -3,6 +3,7 @@ const PORT = 3000;
 const JSON_SIZE_LIMIT = '50mb';
 
 var express = require('express');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var url = require('url');
 var fs = require('fs');
@@ -17,7 +18,15 @@ spotify.interval = setInterval(
 );
 var app = express();
 
+app.set('trust proxy', 1);
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {}
+}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(appRoot + "/public"));
 app.use(partials());
 app.set('views', appRoot + '/views');
@@ -59,15 +68,33 @@ app.post('/trackinfo', function(request, response)  {
     });
 });
 
+app.post('/save', function(request, response) {
+  var sess = request.session;
+  sess.recommendationIds = request.body;
+  var authorizeURL = spotify.authorizeURL();
+  response.json({'authorizeURL': authorizeURL});
+});
+
 app.get('/callback', function(request, response)  {
   var url_parts = url.parse(request.url, true);
   var authCode = url_parts.query.code;
+  var uris = request.session.recommendationIds.map(function(e)  {
+    return 'spotify:track:' + e;
+  });
   var s = new SpotifyHelper();
   s.spotifyApi.authorizationCodeGrant(authCode).then(function(data) {
     s.spotifyApi.setAccessToken(data.body.access_token);
     s.spotifyApi.setRefreshToken(data.body.refresh_token);
     s.getMe().then(function(result) {
-      response.send('Willkommen ' + result.body.id);
+      var userId = result.body.id;
+      var playlistName = 'Crushendo Playlist ' + Date.now();
+      s.spotifyApi.createPlaylist(userId, playlistName, { 'public' : false })
+        .then(function(data) {
+          s.spotifyApi.addTracksToPlaylist(userId, data.body.id, uris)
+            .then(function(data)  {
+              response.redirect("/");
+            });
+        });
     });
   }, function(err)  {
     response.json(err);
