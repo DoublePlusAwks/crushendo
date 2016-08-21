@@ -70,8 +70,7 @@ app.post('/trackinfo', function(request, response)  {
 });
 
 app.post('/save', function(request, response) {
-  var sess = request.session;
-  sess.recommendationIds = request.body;
+  request.session.recommendationIds = request.body;
   var authorizeURL = spotify.authorizeURL();
   response.json({'authorizeURL': authorizeURL});
 });
