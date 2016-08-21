@@ -22,13 +22,13 @@ var app = express();
 app.set('trust proxy', 1);
 app.use(session({
   secret: secrets.sessionSecret,
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: {}
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(appRoot + "/public"));
+app.use(express.static(appRoot + '/public'));
 app.use(partials());
 app.set('views', appRoot + '/views');
 app.set('view engine', 'ejs');
@@ -47,7 +47,7 @@ app.post('/autocomplete', function(request, response) {
   spotify.search(request.body.query).then(function(result)  {
     response.json(result);
   }, function(err)  {
-    console.log("Autocomplete error: " + err);
+    console.log('Autocomplete error: ' + err);
   });
 });
 
@@ -56,7 +56,7 @@ app.post('/recommendations', function(request, response)  {
     .then(function(result)  {
       response.json(result);
     }, function(err)  {
-      console.log("Recommendations error: " + err);
+      console.log('Recommendations error: ' + err);
     });
 });
 
@@ -94,7 +94,8 @@ app.get('/callback', function(request, response)  {
           console.log('Created playlist: ' + data.body.uri);
           s.spotifyApi.addTracksToPlaylist(userId, data.body.id, uris)
             .then(function(data)  {
-              response.redirect("/");
+              request.session.destroy();
+              response.redirect('/');
             });
         });
     });
