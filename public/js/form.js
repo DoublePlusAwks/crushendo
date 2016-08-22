@@ -35,7 +35,7 @@ $(function()  {
       } else {
         seedIds.tracks.push(item.data('id'));
       }
-      $('#seeds').append('<li class="list-group-item">' + item.data('name') + '</li>');
+      $('#seeds').append($('<li>').addClass('list-group-item').text(item.data('name')));
     }
   };
 
@@ -63,19 +63,6 @@ $(function()  {
         );
         $('#save').on('click', function()  {
           $.ajax({
-            beforeSend: function(request){
-              request.setRequestHeader(
-                "Origin",
-                window.location.protocol + window.location.hostname
-              );
-              request.setRequestHeader(
-                "Access-Control-Allow-Credentials", true
-              );
-              request.setRequestHeader(
-                "Access-Control-Allow-Origin",
-                window.location.protocol + window.location.hostname
-              );
-            },
             type: 'POST',
             url: '/save',
             contentType: 'application/json',

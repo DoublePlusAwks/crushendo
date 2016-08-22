@@ -3,7 +3,7 @@ const PORT = 3000;
 const JSON_SIZE_LIMIT = '50mb';
 
 var express = require('express');
-var session = require('express-session');
+var cookieSession = require('cookie-session')
 var bodyParser = require('body-parser');
 var url = require('url');
 var fs = require('fs');
@@ -19,12 +19,12 @@ spotify.interval = setInterval(
 );
 var app = express();
 
-app.set('trust proxy', 1);
-app.use(session({
+app.set('trust proxy', true);
+app.use(cookieSession({
   secret: secrets.sessionSecret,
-  resave: true,
-  saveUninitialized: true,
-  cookie: {}
+  cookie: {
+    maxAge: 1000 * 60 * 30
+  }
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
