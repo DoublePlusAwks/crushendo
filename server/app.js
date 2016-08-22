@@ -94,7 +94,7 @@ app.get('/callback', function(request, response)  {
           console.log('Created playlist: ' + data.body.uri);
           s.spotifyApi.addTracksToPlaylist(userId, data.body.id, uris)
             .then(function(data)  {
-              request.session.destroy();
+              request.session = null;
               response.redirect('/');
             });
         });
