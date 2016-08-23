@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Latest compiled and minified CSS -->
+    <script type="text/javascript">
+      if (document.domain.substring(0,4) === "www.") {
+          window.location.replace(document.URL.replace("//www.", "//"));
+      }
+    </script>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
