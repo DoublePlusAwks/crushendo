@@ -73,8 +73,10 @@ app.post('/trackinfo', function(request, response)  {
 
 app.post('/save', function(request, response) {
   request.session.recommendationIds = request.body;
-  console.log('save');
+  console.log('save cookies');
   console.log(request.cookies);
+  console.log('save session');
+  console.log(request.session);
   var authorizeURL = spotify.authorizeURL();
   response.json({'authorizeURL': authorizeURL});
 });
@@ -101,7 +103,6 @@ app.get('/callback', function(request, response)  {
           console.log('Created playlist: ' + data.body.uri);
           s.spotifyApi.addTracksToPlaylist(userId, data.body.id, uris)
             .then(function(data)  {
-              request.session = null;
               response.redirect('/');
             });
         });
