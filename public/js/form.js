@@ -1,6 +1,7 @@
 $(function()  {
-  var playlistOptions = {};
+  var playlistOptions;
   var step1 = function()  {
+    playlistOptions = {};
     $('#main').empty();
     $('#main').append(
       $('<div>').attr({
@@ -38,7 +39,6 @@ $(function()  {
   };
 
   var step2 = function()  {
-    console.log(playlistOptions);
     $('#main').empty();
     $('#main').append(
       $('<div>').attr({
@@ -91,7 +91,6 @@ $(function()  {
   };
 
   var step3 = function()  {
-    console.log(playlistOptions);
     $('#main').empty();
     $('#main').append(
       $('<div>').addClass('jumbotron').append(
@@ -159,8 +158,6 @@ $(function()  {
         if($('#seeds li').length > 4) {
           $('#seed-input').prop('disabled', true);
         }
-        console.log($('#seeds li').length);
-        console.log(playlistOptions);
       }
     });
 
