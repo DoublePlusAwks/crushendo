@@ -21,6 +21,61 @@ iframe  {
   border-color: #FFB74D;
 }
 
+#main {
+  text-align: center;
+}
+
+.spacer {
+  width: 10%;
+  display: inline-block;
+}
+
+.box  {
+	position: relative;
+  max-width: 200px;
+	width: 40%;		/* desired width */
+  display: inline-block;
+}
+
+.box:before{
+	content: "";
+	display: block;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
+}
+
+.content{
+	position:  absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.btn-img  {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+}
+
+#shoe-button  {
+  background-image: url('../images/shoe.png');
+}
+
+#weight-button  {
+  background-image: url('../images/weight.png');
+}
+
+#bpm-up {
+  border-radius: 50%;
+  background-image: url('../images/up-arrow.png');
+}
+
+#bpm-down {
+  border-radius: 50%;
+  background-image: url('../images/down-arrow.png');
+}
+
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
   color: #fff;
   background-color: #FFCC80;
@@ -30,7 +85,7 @@ iframe  {
 .jumbotron  {
   background-color: #FFB74D;
   max-width: 50%;
-  margin: 0 auto;
+  margin: 5% auto;
 }
 
 .container {

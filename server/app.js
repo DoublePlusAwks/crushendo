@@ -54,7 +54,7 @@ app.post('/autocomplete', function(request, response) {
 });
 
 app.post('/recommendations', function(request, response)  {
-  spotify.getRecommendations(request.body.artists, request.body.tracks, 10)
+  spotify.getRecommendations(request.body, 20)
     .then(function(result)  {
       response.json(result);
     }, function(err)  {
