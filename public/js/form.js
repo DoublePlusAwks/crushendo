@@ -1,6 +1,8 @@
 $(function()  {
+  var origFooter = $('#footer').clone();
   var playlistOptions;
   var step1 = function()  {
+    $('#footer').replaceWith(origFooter.clone());
     playlistOptions = {};
     $('#main').empty();
     $('#main').append(
@@ -39,6 +41,7 @@ $(function()  {
   };
 
   var step2 = function()  {
+    $('#footer').empty();
     $('#main').empty();
     $('#main').append(
       $('<div>').attr({
@@ -91,15 +94,9 @@ $(function()  {
   };
 
   var step3 = function()  {
+    $('#footer').empty();
     $('#main').empty();
     $('#main').append(
-      $('<div>').addClass('jumbotron').append(
-        $('<img>').attr({
-          'class': 'img-responsive',
-          'src': 'images/logo.png'
-        })
-      )
-    ).append(
       $('<div>').append(
         $('<input>').attr({
           'id': 'seed-input',
