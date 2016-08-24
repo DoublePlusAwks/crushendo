@@ -41,7 +41,7 @@ SpotifyHelper.prototype.search = function(query) {
 };
 
 SpotifyHelper.prototype.getRecommendations = function(options, limit)  {
-  var danceability = 0.5;
+  var danceability = 0.7;
   var energy = 0.8;
   // Can be used later to change playlist generations based on
   // lifting or running
