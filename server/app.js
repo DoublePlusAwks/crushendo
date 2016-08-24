@@ -4,7 +4,6 @@ const JSON_SIZE_LIMIT = '50mb';
 
 var express = require('express');
 var cookieSession = require('cookie-session');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var url = require('url');
 var fs = require('fs');
@@ -21,7 +20,6 @@ spotify.interval = setInterval(
 var app = express();
 
 app.set('trust proxy', true);
-app.use(cookieParser(secrets.sessionSecret));
 app.use(cookieSession({
   secret: secrets.sessionSecret,
   cookie: {
@@ -73,19 +71,11 @@ app.post('/trackinfo', function(request, response)  {
 
 app.post('/save', function(request, response) {
   request.session.recommendationIds = request.body;
-  console.log('save cookies');
-  console.log(request.cookies);
-  console.log('save session');
-  console.log(request.session);
   var authorizeURL = spotify.authorizeURL();
   response.json({'authorizeURL': authorizeURL});
 });
 
 app.get('/callback', function(request, response)  {
-  console.log('callback cookies');
-  console.log(request.cookies);
-  console.log('callback session');
-  console.log(request.session);
   var url_parts = url.parse(request.url, true);
   var authCode = url_parts.query.code;
   var uris = request.session.recommendationIds.map(function(e)  {
