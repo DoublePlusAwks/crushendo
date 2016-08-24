@@ -41,14 +41,17 @@ SpotifyHelper.prototype.search = function(query) {
 };
 
 SpotifyHelper.prototype.getRecommendations = function(options, limit)  {
-  var danceability, energy;
-  if(options.type === 'running')  {
-    danceability = 0.8;
-    energy = 0.5;
-  } else {
-    danceability = 0.5;
-    energy = 0.8;
-  }
+  var danceability = 0.5;
+  var energy = 0.8;
+  // Can be used later to change playlist generations based on
+  // lifting or running
+  // if(options.type === 'running')  {
+  //   danceability = 0.6;
+  //   energy = 0.7;
+  // } else {
+  //   danceability = 0.5;
+  //   energy = 0.8;
+  // }
   return this.spotifyApi.getRecommendations({
     seed_artists: options.seedIds.artists,
     seed_tracks: options.seedIds.tracks,
